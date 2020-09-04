@@ -1,0 +1,67 @@
+#
+#
+#       Macro for simulating events using nCapture vertex generator in LS
+#
+#  Date:       2019-08-08 (V Lozza)
+#  Contact:    V Lozza, <vlozza@lip.pt>
+#	       2019-12-19,  New Interface
+#	       2019-03-19,  Remove interface + update macro to run by run
+#
+#
+#              Run with -r option
+#
+
+# Don't care about hadrons or muons so quicker not to initialise these processes
+/rat/physics_list/OmitMuonicProcesses true
+
+/rat/db/set DETECTOR geo_file "geo/snoplus_partial.geo"
+/rat/db/set GEO[inner_av] material_top "labppo_0p5_scintillator" # Measured 0.53 g/L PPO
+/rat/db/set GEO[inner_av] split_z 747.5
+
+/rat/db/load scint_detstate/PMT_DQXX_SCINT.ratdb
+/rat/db/load scint_detstate/DAQ_RUN_LEVEL_PARTIAL_SCINT.ratdb
+
+#Use scint Noise table
+/rat/db/load scint_detstate/NOISE_RUN_INTEGRATED_SCINT.ratdb
+
+#To simulate noise using the per-pmt rates:
+/rat/db/set NOISE_MC noise_flag 2
+#To read the per-pmt noise rates from the NOISE_RUN_INTEGRATED table:
+/rat/db/set NOISE_MC integ_noise_flag 1
+
+## MC cutoff parameters
+/rat/db/set MC event_cutoff_time 1e9
+/rat/db/set MC event_cutoff_nstep 1000
+
+#/rat/db/set RUN start_day ${day}
+#/rat/db/set RUN start_sec 0
+#/rat/db/set RUN start_nsc 0.0
+
+/run/initialize
+
+/rat/proc frontend
+/rat/proc trigger
+/rat/proc eventbuilder
+/rat/proc calibratePMT
+
+
+/rat/proc classifier
+/rat/procset classifier "skyshine"
+/rat/procset name "skyshine"
+
+/rat/proc fitter
+/rat/procset method "fastZ"
+/rat/procset name "fastZ"
+
+/rat/proc partialFitter
+
+/rat/proc outntuple
+/rat/proclast outroot
+
+/generator/add combo alpha_n:fill:poisson
+/generator/vtx/set LAB 13C
+/generator/pos/set inner_av_top 
+/generator/rate/set 3.38
+
+/rat/run/start 5
+exit
