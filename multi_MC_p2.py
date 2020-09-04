@@ -1,15 +1,20 @@
 #prompting message
+#this is a 3 cores program
 #If data is large, limited the record value
 #Sometimes deltaT < 0 in MC data
 #Modify cores before each time
-#cut in z and radius
+#this is used to analysis events found in file multi_MC_anal.py
+#this is an example of display result
+#if you need to check more values, please do following steps
+#create a new multiprocessing.Manager().list() variable after what I made
+#append values in list just created
 
 import multiprocessing
 import ROOT
 import numpy as np
 import array
 #multicores general value
-
+#you can delet them and corresponding .append part at the same time
 delt = multiprocessing.Manager().list()
 pev= multiprocessing.Manager().list()
 dev= multiprocessing.Manager().list()
@@ -18,10 +23,11 @@ prad = multiprocessing.Manager().list()
 drad = multiprocessing.Manager().list()
 pnh = multiprocessing.Manager().list()
 dnh = multiprocessing.Manager().list()
+#read part, do not delet it
 pev = np.loadtxt('csv_pevents.csv',delimiter = ',',skiprows = 0)
 dev = np.loadtxt('csv_devents.csv',delimiter = ',',skiprows = 0)
 
-#progress finction, _2 means version 2
+#progress finction, _2 means analysis part
 def find_2(num):
     infile = ROOT.TFile("combine.root")
     tree = infile.Get("output")
