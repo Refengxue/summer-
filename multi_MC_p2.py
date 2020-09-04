@@ -1,3 +1,4 @@
+#Author Yuxuan Wu
 #prompting message
 #this is a 3 cores program
 #If data is large, limited the record value
