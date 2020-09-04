@@ -1,3 +1,4 @@
+#Author Yuxuan Wu
 #prompting message
 
 #this is a specified multi cores program, it use 32 cores currently. Make sure you have enough cores or it will have some errors
